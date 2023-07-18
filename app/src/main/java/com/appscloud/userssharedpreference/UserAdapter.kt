@@ -18,7 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 // vinculamos nuestra vista y para lograr esto habilitamos viewBinding.
 
 
-class UserAdapter(private val user: List<Usuario>) :
+class UserAdapter(private val user: List<Usuario>, private val listener: OnClickListener) :
     RecyclerView.Adapter<UserAdapter.ViewHolderUser>() {
 
     //con lateinit indicamos que la variable será inicializada después
@@ -33,11 +33,12 @@ class UserAdapter(private val user: List<Usuario>) :
 
     // para llenar cada celda conla información correspondiente
     override fun onBindViewHolder(holder: ViewHolderUser, position: Int) {
-        val user =
-            user.get(position)// constante que guarda el indice del objeto user como el for each
+        val user = user.get(position)// constante que guarda el indice del objeto user como el for each
+
 
         //usamos la funciona de alcance with para alimentar cada propiedad respecto al valor de cada usuario
         with(holder) {
+            setListener(user, position + 1)
             binding.tvOrder.text = (position + 1).toString()
             binding.tvName.text = user.getFullName()
            // binding.tvName.text = user.name + " " + user.lastName
@@ -60,5 +61,10 @@ class UserAdapter(private val user: List<Usuario>) :
     //inner se refiere que es una clase interna
     inner class ViewHolderUser(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemUserBinding.bind(view)// vinculamos la vista view a este adaptador
+
+        //recibe un usuario que posteriormente le mandaremos a nuestra activity
+        fun setListener(usuario: Usuario, position: Int) {
+            binding.root.setOnClickListener {  listener.onClick(usuario, position)}
+        }
     }
 }
