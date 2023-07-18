@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appscloud.userssharedpreference.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -28,19 +29,29 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         // leemos un dato dentro de estas preferencias
         val isFirstTime = preferences.getBoolean(getString(R.string.sp_first_time), true)
         Log.i("SP", "${getString(R.string.sp_first_time)} = $isFirstTime")
+        Log.i("SP", "${getString(R.string.sp_username)} = ${preferences.getString(getString(R.string.sp_username), "NA")}")
 
-        // esta línea inserta un dato cada vez que inicia nuestra aplicacion
+        // esta línea inserta un dato la primera vez que inicia nuestra aplicacion
         if (isFirstTime) {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_register, null)
 
             MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title)
-                .setPositiveButton(R.string.dialog_confirm, { dialogInterface, i ->
+                .setCancelable(false)
+                .setView(dialogView)
+                .setPositiveButton(R.string.dialog_confirm) { dialogInterface, i ->
+                    val username = dialogView.findViewById<TextInputEditText>(R.id.et_username)
+                        .text.toString()
+                    with(preferences.edit()) {
+                        putBoolean(getString(R.string.sp_first_time), false)
+                        putString(getString(R.string.sp_username), username).apply()
+                    }
                     // cuando pulse el boton de confirmar
-                    preferences.edit().putBoolean(getString(R.string.sp_first_time), false).commit()
 
-                })
-                .setNegativeButton("Cancelar", null)
+
+                }
                 .show()
+
 
         }
 

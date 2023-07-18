@@ -33,7 +33,8 @@ class UserAdapter(private val user: List<Usuario>, private val listener: OnClick
 
     // para llenar cada celda conla información correspondiente
     override fun onBindViewHolder(holder: ViewHolderUser, position: Int) {
-        val user = user.get(position)// constante que guarda el indice del objeto user como el for each
+        val user =
+            user.get(position)// constante que guarda el indice del objeto user como el for each
 
 
         //usamos la funciona de alcance with para alimentar cada propiedad respecto al valor de cada usuario
@@ -41,7 +42,7 @@ class UserAdapter(private val user: List<Usuario>, private val listener: OnClick
             setListener(user, position + 1)
             binding.tvOrder.text = (position + 1).toString()
             binding.tvName.text = user.getFullName()
-           // binding.tvName.text = user.name + " " + user.lastName
+            // binding.tvName.text = user.name + " " + user.lastName
             Glide.with(context)
                 .load(user.url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -64,7 +65,9 @@ class UserAdapter(private val user: List<Usuario>, private val listener: OnClick
 
         //recibe un usuario que posteriormente le mandaremos a nuestra activity
         fun setListener(usuario: Usuario, position: Int) {
-            binding.root.setOnClickListener {  listener.onClick(usuario, position)}
+            binding.root.setOnClickListener {
+                listener.onClick(usuario, position)
+            }
         }
     }
 }
